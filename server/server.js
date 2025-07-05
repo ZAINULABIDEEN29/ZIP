@@ -42,7 +42,12 @@ app.use('/api/interns', internRoutes);
 app.use('/api/skills', skillRoutes);
 
 
-
+app.get("/",(req,res)=>{
+  res.send({
+    success:true,
+    message:"route Working"
+  })
+})
 
 // Error handling middleware
 app.use((err, req, res, next) => {
