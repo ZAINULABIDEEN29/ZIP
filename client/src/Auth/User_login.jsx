@@ -136,7 +136,7 @@ export default function User_login() {
       </div>
 
       {/* Right Panel - Branding */}
-      <div className="hidden lg:flex lg:w-1/2 bg-[#E11D48]  text-white flex-col items-center justify-center p-8 relative">
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-red-900 via-primary to-pink-900  text-white flex-col items-center justify-center p-8 relative">
         {/* Background Pattern */}
         <div 
           className="absolute inset-0 opacity-5"

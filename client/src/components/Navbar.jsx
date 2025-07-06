@@ -104,7 +104,7 @@ const Navbar = () => {
         <div className="container mx-auto px-4">
           <nav className="flex items-center justify-between py-4 lg:px-20" ref={navbarRef} onMouseLeave={handleNavbarLeave}>
             {/* Logo */}
-            <Link to="/" className="flex items-center ">
+            <Link to="https://www.zimlitech.com/" className="flex items-center ">
               <header className="flex items-center">
                 <img 
                   src="/zimlitech_logo.png" 
