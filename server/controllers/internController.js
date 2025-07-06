@@ -386,6 +386,12 @@ const getTeamProjects = async (req, res) => {
   }
 };
 
+// Default avatar data URL (base64 encoded small avatar)
+const DEFAULT_AVATAR = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxjaXJjbGUgY3g9IjUwIiBjeT0iMzUiIHI9IjE1IiBmaWxsPSIjRjM0RjU2Ii8+CjxyZWN0IHg9IjMwIiB5PSI2MCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjMwIiBmaWxsPSIjRjM0RjU2Ii8+Cjwvc3ZnPgo=';
+
+// Default project image data URL
+const DEFAULT_PROJECT = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDMwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRjNGNEY2Ii8+Cjx0ZXh0IHg9IjE1MCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiM2QjcyODAiIHRleHQtYW5jaG9yPSJtaWRkbGUiPk5vIEltYWdlPC90ZXh0Pgo8L3N2Zz4K';
+
 // Get dashboard data (aggregated)
 const getDashboardData = async (req, res) => {
   try {
@@ -393,6 +399,7 @@ const getDashboardData = async (req, res) => {
     if (!intern) {
       return res.status(404).json({ error: 'Intern not found' });
     }
+    
     // Update legacy projects that don't have type field
     let hasUpdated = false;
     intern.portfolio.forEach(project => {
@@ -405,7 +412,6 @@ const getDashboardData = async (req, res) => {
     // Save if any updates were made
     if (hasUpdated) {
       await intern.save();
-    
     }
 
     const dashboardData = {
@@ -414,7 +420,7 @@ const getDashboardData = async (req, res) => {
         email: intern.email,
         role: intern.role,
         category: intern.category,
-        avatar: intern.avatar || '/images/default-avatar.png',
+        avatar: intern.avatar || DEFAULT_AVATAR,
         phone: intern.phone,
         location: intern.location,
         bio: intern.bio,
@@ -930,7 +936,7 @@ const getAllInternsForLanding = async (req, res) => {
       id: intern._id,
       name: intern.name,
       role: intern.role,
-      avatar: intern.avatar || '/images/default-avatar.png',
+      avatar: intern.avatar || DEFAULT_AVATAR,
       location: intern.location || 'Location not specified',
       email: intern.email,
       phone: intern.phone || '+1 (555) 000-0000',
@@ -944,7 +950,7 @@ const getAllInternsForLanding = async (req, res) => {
         id: project._id,
         title: project.title,
         description: project.description || 'Project description',
-        image: project.image || '/images/default-project.png',
+        image: project.image || DEFAULT_PROJECT,
         technologies: project.technologies || ['React', 'Node.js'],
         liveUrl: project.liveUrl || 'https://example.com',
         githubUrl: project.githubUrl || 'https://github.com',
