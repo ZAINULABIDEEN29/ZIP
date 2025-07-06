@@ -204,7 +204,7 @@ const Portfolio = () => {
           <div className="flex flex-col sm:flex-row justify-between items-start gap-3 sm:gap-4 lg:gap-6 mb-4 sm:mb-6 lg:mb-8">
             <h1 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-gray-800">Work Portfolio</h1>
             <div className="flex gap-2 sm:gap-3 w-full sm:w-auto">
-              <button
+              {/* <button
                 onClick={async () => {
                 
                   await refreshPortfolio();
@@ -213,7 +213,7 @@ const Portfolio = () => {
                 className="bg-gray-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-xl flex items-center gap-2 sm:gap-3 hover:scale-105 transition text-sm sm:text-lg font-medium justify-center"
               >
                 <RefreshCw size={20} className="sm:w-6 sm:h-6" /> Refresh
-              </button>
+              </button> */}
               <button
                 onClick={() => {
                   setShowAddModal(true);
@@ -415,7 +415,7 @@ const Portfolio = () => {
                     <img 
                       src={newProject.image} 
                       alt="Project preview" 
-                      className="w-full h-24 sm:h-32 object-cover rounded-lg border border-gray-200"
+                      className="w-full h-24 sm:h-32  object-cover rounded-lg border border-gray-200"
                     />
                     <button
                       type="button"
