@@ -113,8 +113,8 @@ export const AuthProvider = ({ children }) => {
         // Then, try to restore from backup if localStorage is empty
         restoreFromBackup();
         
-        // Restore from localStorage immediately
-        const storedToken = localStorage.getItem('authToken');
+    // Restore from localStorage immediately
+    const storedToken = localStorage.getItem('authToken');
         const storedUser = localStorage.getItem('userData');
         
         // Add a safeguard - if we had data before but it's gone now, log it
@@ -171,7 +171,7 @@ export const AuthProvider = ({ children }) => {
             }
           }
           
-          setLoading(false);
+        setLoading(false);
 
           // Store current data in sessionStorage for comparison and backup
           sessionStorage.setItem('previousToken', storedToken);
@@ -181,10 +181,10 @@ export const AuthProvider = ({ children }) => {
           // Validate token in background (don't block UI)
           try {
             const response = await fetch(`${BACKEND_URL}/auth/me`, {
-              headers: {
-                'Authorization': `Bearer ${storedToken}`,
-                'Content-Type': 'application/json',
-              },
+            headers: {
+          'Authorization': `Bearer ${storedToken}`,
+              'Content-Type': 'application/json',
+            },
             });
             
             if (response.ok) {
@@ -192,8 +192,8 @@ export const AuthProvider = ({ children }) => {
               
               // Only update user data if we actually received valid user data
               if (data.user && typeof data.user === 'object') {
-                setUser(data.user);
-                localStorage.setItem('userData', JSON.stringify(data.user));
+            setUser(data.user);
+            localStorage.setItem('userData', JSON.stringify(data.user));
                 backupAuthData(); // Update backup with new data
               } else {
                 console.warn('⚠️ Backend returned invalid user data, keeping existing data');
