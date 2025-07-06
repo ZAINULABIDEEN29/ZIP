@@ -27,14 +27,6 @@ api.interceptors.response.use(
     return response.data;
   },
   (error) => {
-    // Handle 401 errors (token expired)
-    if (error.response && error.response.status === 401) {
-      console.warn('Token expired or invalid. Clearing auth data...');
-      localStorage.removeItem('authToken');
-      localStorage.removeItem('userData');
-      // Redirect to login page
-      window.location.href = '/auth/login';
-    }
     throw error;
   }
 );
