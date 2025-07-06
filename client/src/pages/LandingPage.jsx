@@ -56,6 +56,14 @@ const LandingPage = () => {
 
     fetchData();
     
+   
+
+ 
+
+  }, []);
+
+  // Fetch interns when category changes
+  useEffect(() => {
     const fetchInternsByCategory = async () => {
       try {
         setLoading(true);
@@ -71,27 +79,7 @@ const LandingPage = () => {
     if (categories.length > 0) {
       fetchInternsByCategory();
     }
-
   }, [activeTab, categories.length]);
-
-  // Fetch interns when category changes
-  // useEffect(() => {
-  //   const fetchInternsByCategory = async () => {
-  //     try {
-  //       setLoading(true);
-  //       const data = await landingService.getAllInterns(activeTab);
-  //       setInterns(data);
-  //     } catch (err) {
-  //       setError('Failed to load interns for this category.');
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   if (categories.length > 0) {
-  //     fetchInternsByCategory();
-  //   }
-  // }, [activeTab, categories.length]);
 
   // Removed automatic redirect - authenticated users can now view the landing page
 
