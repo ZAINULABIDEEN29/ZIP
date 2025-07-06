@@ -30,7 +30,7 @@ export default function ApproveIntern() {
         //   ? 'https://your-backend-domain.com/api/auth'
         //   : 'http://localhost:5000/api/auth';
         
-        const response = await axios.get(`${BACKEND_URL}/api/auth/approve-intern/${token}`);
+        const response = await axios.get(`${BACKEND_URL}/auth/approve-intern/${token}`);
         // If we reach here, the request was successful
         setStatus('success');
         setMessage('Intern approved successfully! You can now log in.');

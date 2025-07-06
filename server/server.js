@@ -14,7 +14,15 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Connect to MongoDB
-connectDB();
+const startServer = async () => {
+  try {
+    await connectDB();
+    console.log('✅ Database connected successfully');
+  } catch (error) {
+    console.error('❌ Database connection failed:', error);
+  }
+};
+startServer();
 
 // Security middleware
 app.use(helmet());
@@ -34,8 +42,7 @@ if (process.env.NODE_ENV !== 'production') {
   app.use(morgan('combined'));
 }
 
-// Logging middleware
-app.use(morgan('combined'));
+
 
 // Body parsing middleware with increased limits for base64 images
 app.use(express.json({ limit: '10mb' }));

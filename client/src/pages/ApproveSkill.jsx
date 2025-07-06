@@ -24,7 +24,7 @@ const ApproveSkill = () => {
             try {
               
                 
-                const response = await axios.get(`${BACKEND_URL}/api/skills/approve/${token}`);
+                const response = await axios.get(`${BACKEND_URL}/skills/approve/${token}`);
                 
                 
                 // If we reach here, the request was successful

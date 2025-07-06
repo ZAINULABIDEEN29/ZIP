@@ -6,7 +6,7 @@ const BACKEND_URL= import.meta.env.VITE_API_URL;
 
 // Create axios instance with default config
 const api = axios.create({
-  baseURL: `${BACKEND_URL}/api/interns`,
+  baseURL: `${BACKEND_URL}/interns`,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -121,7 +121,7 @@ export const getDailyTasks = async (internId, filters = {}) => {
   try {
     const token = localStorage.getItem('authToken');
     const queryParams = new URLSearchParams(filters).toString();
-    const response = await fetch(`${BACKEND_URL}/api/interns/${internId}/daily-tasks?${queryParams}`, {
+    const response = await fetch(`${BACKEND_URL}/interns/${internId}/daily-tasks?${queryParams}`, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
@@ -141,7 +141,7 @@ export const getDailyTasks = async (internId, filters = {}) => {
 export const addDailyTask = async (internId, taskData) => {
   try {
     const token = localStorage.getItem('authToken');
-    const response = await fetch(`${BACKEND_URL}/api/interns/${internId}/daily-tasks`, {
+    const response = await fetch(`${BACKEND_URL}/interns/${internId}/daily-tasks`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -163,7 +163,7 @@ export const addDailyTask = async (internId, taskData) => {
 export const updateDailyTask = async (internId, taskId, updateData) => {
   try {
     const token = localStorage.getItem('authToken');
-    const response = await fetch(`${BACKEND_URL}/api/interns/${internId}/daily-tasks/${taskId}`, {
+    const response = await fetch(`${BACKEND_URL}/interns/${internId}/daily-tasks/${taskId}`, {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -185,7 +185,7 @@ export const updateDailyTask = async (internId, taskId, updateData) => {
 export const deleteDailyTask = async (internId, taskId) => {
   try {
     const token = localStorage.getItem('authToken');
-    const response = await fetch(`${BACKEND_URL}/api/interns/${internId}/daily-tasks/${taskId}`, {
+    const response = await fetch(`${BACKEND_URL}/interns/${internId}/daily-tasks/${taskId}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -207,7 +207,7 @@ export const getDailyTaskStats = async (internId, dateRange = {}) => {
   try {
     const token = localStorage.getItem('authToken');
     const queryParams = new URLSearchParams(dateRange).toString();
-    const response = await fetch(`${BACKEND_URL}/api/interns/${internId}/daily-tasks-stats?${queryParams}`, {
+    const response = await fetch(`${BACKEND_URL}/interns/${internId}/daily-tasks-stats?${queryParams}`, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'

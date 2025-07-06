@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { showToast } from '../components/Toast';
 
 const BACKEND_URL= import.meta.env.VITE_API_URL;
@@ -10,12 +10,58 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem('authToken'));
   const [loading, setLoading] = useState(true); // Start with true to show loading
   const [isValidating, setIsValidating] = useState(false);
+  
+  // Inactivity detection
+  const inactivityTimeoutRef = useRef(null);
+  const INACTIVITY_TIMEOUT = 30 * 60 * 1000; // 30 minutes in milliseconds
 
   // Development mode: completely skip token validation
   // const DEV_MODE = false; // Set to false in production
 
   // Check if user is authenticated - more robust check
   const isAuthenticated = !!(token && (user || localStorage.getItem('userData')));
+
+  // Reset inactivity timer
+  const resetInactivityTimer = () => {
+    if (inactivityTimeoutRef.current) {
+      clearTimeout(inactivityTimeoutRef.current);
+    }
+    
+    if (isAuthenticated) {
+      inactivityTimeoutRef.current = setTimeout(() => {
+        showToast('Session expired due to inactivity. Please login again.', 'error');
+        logout();
+      }, INACTIVITY_TIMEOUT);
+    }
+  };
+
+  // Handle user activity events
+  const handleUserActivity = () => {
+    resetInactivityTimer();
+  };
+
+  // Set up activity listeners
+  useEffect(() => {
+    if (isAuthenticated) {
+      const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click'];
+      
+      events.forEach(event => {
+        document.addEventListener(event, handleUserActivity, true);
+      });
+
+      // Start the inactivity timer
+      resetInactivityTimer();
+
+      return () => {
+        events.forEach(event => {
+          document.removeEventListener(event, handleUserActivity, true);
+        });
+        if (inactivityTimeoutRef.current) {
+          clearTimeout(inactivityTimeoutRef.current);
+        }
+      };
+    }
+  }, [isAuthenticated]);
 
   // Backup localStorage data to sessionStorage
   const backupAuthData = () => {
@@ -67,10 +113,9 @@ export const AuthProvider = ({ children }) => {
         // Then, try to restore from backup if localStorage is empty
         restoreFromBackup();
         
-    // Restore from localStorage immediately
-    const storedToken = localStorage.getItem('authToken');
+        // Restore from localStorage immediately
+        const storedToken = localStorage.getItem('authToken');
         const storedUser = localStorage.getItem('userData');
-        
         
         // Add a safeguard - if we had data before but it's gone now, log it
         const previousToken = sessionStorage.getItem('previousToken');
@@ -126,7 +171,7 @@ export const AuthProvider = ({ children }) => {
             }
           }
           
-        setLoading(false);
+          setLoading(false);
 
           // Store current data in sessionStorage for comparison and backup
           sessionStorage.setItem('previousToken', storedToken);
@@ -135,11 +180,11 @@ export const AuthProvider = ({ children }) => {
           
           // Validate token in background (don't block UI)
           try {
-            const response = await fetch(`${BACKEND_URL}/api/auth/me`, {
-            headers: {
-          'Authorization': `Bearer ${storedToken}`,
-              'Content-Type': 'application/json',
-            },
+            const response = await fetch(`${BACKEND_URL}/auth/me`, {
+              headers: {
+                'Authorization': `Bearer ${storedToken}`,
+                'Content-Type': 'application/json',
+              },
             });
             
             if (response.ok) {
@@ -147,8 +192,8 @@ export const AuthProvider = ({ children }) => {
               
               // Only update user data if we actually received valid user data
               if (data.user && typeof data.user === 'object') {
-            setUser(data.user);
-            localStorage.setItem('userData', JSON.stringify(data.user));
+                setUser(data.user);
+                localStorage.setItem('userData', JSON.stringify(data.user));
                 backupAuthData(); // Update backup with new data
               } else {
                 console.warn('⚠️ Backend returned invalid user data, keeping existing data');
@@ -207,7 +252,7 @@ export const AuthProvider = ({ children }) => {
     setLoading(true);
     try {
       
-      const response = await fetch(`${BACKEND_URL}/api/auth/login`, {
+      const response = await fetch(`${BACKEND_URL}/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -235,6 +280,8 @@ export const AuthProvider = ({ children }) => {
       // Create backup
       backupAuthData();
       
+      // Reset inactivity timer after login
+      resetInactivityTimer();
       
       showToast('Login successful!');
       return data;
@@ -251,7 +298,7 @@ export const AuthProvider = ({ children }) => {
   const register = async (userData) => {
     setLoading(true);
     try {
-      const response = await fetch(`${BACKEND_URL}/api/auth/register`, {
+      const response = await fetch(`${BACKEND_URL}/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -277,6 +324,10 @@ export const AuthProvider = ({ children }) => {
 
   // Logout function
   const logout = () => {
+    // Clear inactivity timer
+    if (inactivityTimeoutRef.current) {
+      clearTimeout(inactivityTimeoutRef.current);
+    }
     
     // Clear localStorage
     localStorage.removeItem('authToken');
@@ -291,7 +342,6 @@ export const AuthProvider = ({ children }) => {
     // Clear state
     setToken(null);
     setUser(null);
-    
   };
 
   // Update user data (for profile updates)

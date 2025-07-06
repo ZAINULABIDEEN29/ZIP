@@ -25,7 +25,7 @@ export default function ApproveProject() {
         //   : 'http://localhost:5000/api/interns';
         
         
-        const response = await axios.get(`${BACKEND_URL}/api/interns/approve-project?token=${token}`);
+        const response = await axios.get(`${BACKEND_URL}/interns/approve-project?token=${token}`);
 
         
         if (response.data.success) {

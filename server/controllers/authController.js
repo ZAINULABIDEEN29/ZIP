@@ -29,7 +29,7 @@ module.exports.registerUSer = async (req, res) => {
       const approvalLink = `${process.env.FRONTEND_URL}/approve-intern/${approvalToken}`;
       await sendAdminApprovalEmail(intern, approvalLink);
   
-      // Create JWT token
+      // Create JWT token with 30 minutes expiration
       const payload = {
         user: {
           id: intern.id,
@@ -40,7 +40,7 @@ module.exports.registerUSer = async (req, res) => {
       jwt.sign(
         payload,
         process.env.JWT_SECRET,
-        { expiresIn: '24h' },
+        { expiresIn: '30m' }, // Changed from 24h to 30m
         (err, token) => {
           if (err) throw err;
           res.json({ 
@@ -108,7 +108,7 @@ module.exports.registerUSer = async (req, res) => {
       }
   
   
-      // Create JWT token
+      // Create JWT token with 30 minutes expiration
       const payload = {
         user: {
           id: intern._id,
@@ -119,7 +119,7 @@ module.exports.registerUSer = async (req, res) => {
       jwt.sign(
         payload,
         process.env.JWT_SECRET,
-        { expiresIn: '24h' },
+        { expiresIn: '30m' }, // Changed from 24h to 30m
         (err, token) => {
           if (err) throw err;
           res.json({ 

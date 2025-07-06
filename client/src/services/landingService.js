@@ -6,7 +6,7 @@ export const landingService = {
   // Get all interns for landing page
   async getAllInterns(category = 'all') {
     try {
-      const response = await fetch(`${BACKEND_URL}/api/interns/landing/all?category=${category}`);
+      const response = await fetch(`${BACKEND_URL}/interns/landing/all?category=${category}`);
       if (!response.ok) {
         throw new Error('Failed to fetch interns');
       }
@@ -20,7 +20,7 @@ export const landingService = {
   // Get categories with counts
   async getCategoriesWithCounts() {
     try {
-      const response = await fetch(`${BACKEND_URL}/api/interns/landing/categories`);
+      const response = await fetch(`${BACKEND_URL}/interns/landing/categories`);
       if (!response.ok) {
         throw new Error('Failed to fetch categories');
       }

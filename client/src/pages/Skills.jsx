@@ -39,7 +39,7 @@ const Skills = () => {
     try {
       const token = localStorage.getItem('authToken');
       
-      await axios.post(`${BACKEND_URL}/api/skills/request-approval`,newSkill,{
+      await axios.post(`${BACKEND_URL}/skills/request-approval`,newSkill,{
         headers:{
           Authorization:`Bearer ${token}`
         }
