@@ -14,8 +14,9 @@ module.exports.sendAdminApprovalEmail = async (user, approvalLink) => {
 
   // process.env.SMTP_MAIL
   const mailOptions = {
-    from:user.email,
-    to: process.env.SMTP_MAIL, // Admin's email
+    from:`"Zimlitech Intern Portal" <${process.env.SMTP_MAIL}>`,
+    to: process.env.SMTP_MAIL,// Admin's email
+    replyTo:user.email, 
     subject: '🎯 New Intern Registration - Approval Required',
     html: `
       <!DOCTYPE html>
@@ -372,10 +373,10 @@ module.exports.sendPasswordResetEmail = async (user, resetLink) => {
         pass: process.env.SMTP_PASSWORD
       }
     });
-    console.log(user.email, "User's Email")
+  
 
     const mailOptions = {
-      from: process.env.SMTP_MAIL,
+      from:`"Zimlitech Intern Portal" <${process.env.SMTP_MAIL}>`,
       to: user.email,
       subject: '🔐 Password Reset Request - Zimlitech Intern Portal',
       html: `
@@ -696,8 +697,8 @@ module.exports.sendSkillApprovalEmail = async (adminEmail, approvalLink, skill, 
       });
     
       const mailOptions = {
-        from: process.env.SMTP_MAIL,
-        to: process.env.ADMIN_EMAIL, // Admin's email
+        from: `"Zimlitech Intern Portal" <${process.env.SMTP_MAIL}>`,
+        to: process.env.SMTP_MAIL, // Admin's email
         subject: '🎯 New Skill Addition Request - Approval Required',
         html: `
           <!DOCTYPE html>
@@ -1096,8 +1097,8 @@ module.exports.sendProjectApprovalEmail = async (intern, project) => {
     const approvalLink = `${process.env.FRONTEND_URL }/approve-project/${project.approvalToken}`;
 
     const mailOptions = {
-      from: process.env.SMTP_MAIL,
-      to: process.env.ADMIN_EMAIL,
+      from: `"Zimlitech Intern Portal" <${process.env.SMTP_MAIL}>`,
+      to: process.env.SMTP_MAIL,
       subject: '🚀 New Zimlitech Project Submission - Approval Required',
       html: `
         <!DOCTYPE html>
