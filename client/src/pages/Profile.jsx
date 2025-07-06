@@ -208,63 +208,63 @@ const Profile = () => {
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
-                <div className="flex items-center gap-3 min-w-0">
-                  <Mail className="text-primary flex-shrink-0" size={20} />
+                <div className="flex items-center gap-3">
+                  <Mail className="text-primary" size={20} />
                   {isEditing ? (
                     <input
                       type="email"
                       value={editData.email}
                       onChange={(e) => setEditData({...editData, email: e.target.value})}
-                      className="flex-1 bg-transparent border-b-2 border-primary focus:outline-none text-sm lg:text-base min-w-0"
+                      className="flex-1 bg-transparent  border-b-2 border-primary focus:outline-none text-sm lg:text-base"
                     />
                   ) : (
-                    <span className="text-gray-700 text-sm lg:text-base truncate">{profile?.email || 'your.email@example.com'}</span>
+                    <span className="text-gray-700 text-sm lg:text-base">{profile?.email || 'your.email@example.com'}</span>
                   )}
                 </div>
-                <div className="flex items-center gap-3 min-w-0">
-                  <Phone className="text-primary flex-shrink-0" size={20} />
+                <div className="flex items-center gap-3">
+                  <Phone className="text-primary" size={20} />
                   {isEditing ? (
                     <input
                       type="tel"
                       value={editData.phone}
                       onChange={(e) => setEditData({...editData, phone: e.target.value})}
-                      className="flex-1 bg-transparent border-b-2 border-primary focus:outline-none text-sm lg:text-base min-w-0"
+                      className="flex-1 bg-transparent border-b-2 border-primary focus:outline-none text-sm lg:text-base"
                     />
                   ) : (
-                    <span className="text-gray-700 text-sm lg:text-base truncate">{profile?.phone || 'Add your phone'}</span>
+                    <span className="text-gray-700 text-sm lg:text-base">{profile?.phone || 'Add your phone'}</span>
                   )}
                 </div>
-                <div className="flex items-center gap-3 min-w-0">
-                  <MapPin className="text-primary flex-shrink-0" size={20} />
+                <div className="flex items-center gap-3">
+                  <MapPin className="text-primary" size={20} />
                   {isEditing ? (
                     <input
                       type="text"
                       value={editData.location}
                       onChange={(e) => setEditData({...editData, location: e.target.value})}
-                      className="flex-1 bg-transparent border-b-2 border-primary focus:outline-none text-sm lg:text-base min-w-0"
+                      className="flex-1 bg-transparent border-b-2 border-primary focus:outline-none text-sm lg:text-base"
                     />
                   ) : (
-                    <span className="text-gray-700 text-sm lg:text-base truncate">{profile?.location || 'Add your location'}</span>
+                    <span className="text-gray-700 text-sm lg:text-base">{profile?.location || 'Add your location'}</span>
                   )}
                 </div>
-                <div className="flex items-center gap-3 min-w-0">
-                  <Calendar className="text-primary flex-shrink-0" size={20} />
-                  <span className="text-gray-700 text-sm lg:text-base truncate">
+                <div className="flex items-center gap-3">
+                  <Calendar className="text-primary" size={20} />
+                  <span className="text-gray-700 text-sm lg:text-base">
                     Started: {profile?.startDate ? new Date(profile.startDate).toLocaleDateString() : 'Add start date'}
                   </span>
                 </div>
-                <div className="flex items-center gap-3 min-w-0">
-                  <Briefcase className="text-primary flex-shrink-0" size={20} />
+                <div className="flex items-center gap-3">
+                  <Briefcase className="text-primary" size={20} />
                   {isEditing ? (
                     <input
                       type="text"
                       value={editData.education}
                       onChange={(e) => setEditData({...editData, education: e.target.value})}
-                      className="flex-1 bg-transparent border-b-2 border-primary focus:outline-none text-sm lg:text-base min-w-0"
+                      className="flex-1 bg-transparent border-b-2 border-primary focus:outline-none text-sm lg:text-base"
                       placeholder="e.g. BSc Computer Science, MIT"
                     />
                   ) : (
-                    <span className="text-gray-700 text-sm lg:text-base truncate">{profile?.education || 'Add your education'}</span>
+                    <span className="text-gray-700 text-sm lg:text-base">{profile?.education || 'Add your education'}</span>
                   )}
                 </div>
               </div>
