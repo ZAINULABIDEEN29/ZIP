@@ -35,7 +35,7 @@ const PortfolioItemCard = ({ project, onDelete, githubProfileUrl }) => {
         <img 
           src={project.image} 
           alt={project.title}
-          className="w-full full sm:h-52 lg:h-60 xl:h-72 object-cover rounded-t-3xl border-b border-gray-100 group-hover:scale-105 transition-transform duration-200"
+          className="w-full  sm:h-52 lg:h-full xl:h-72 object-cover rounded-t-3xl border-b border-gray-100 group-hover:scale-105 transition-transform duration-200"
         />
         <div className="absolute top-4 left-4">
           <span className="bg-gradient-to-r from-primary to-blue-500 text-white px-3 py-1 rounded-full text-xs sm:text-sm font-semibold shadow-md">
