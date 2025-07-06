@@ -12,9 +12,10 @@ module.exports.sendAdminApprovalEmail = async (user, approvalLink) => {
     }
   });
 
+  // process.env.SMTP_MAIL
   const mailOptions = {
-    from: process.env.SMTP_MAIL,
-    to: process.env.ADMIN_EMAIL, // Admin's email
+    from:user.email,
+    to: process.env.SMTP_MAIL, // Admin's email
     subject: '🎯 New Intern Registration - Approval Required',
     html: `
       <!DOCTYPE html>
