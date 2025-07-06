@@ -346,9 +346,9 @@ module.exports.sendAdminApprovalEmail = async (user, approvalLink) => {
               ${approvalLink}
             </p>
             <div class="footer-links">
-              <a href="${process.env.FRONTEND_URL || 'http://localhost:5173'}">Dashboard</a>
+              <a href="${process.env.FRONTEND_URL }">Dashboard</a>
               <span>•</span>
-              <a href="${process.env.FRONTEND_URL || 'http://localhost:5173'}/admin">Admin Panel</a>
+              <a href="${process.env.FRONTEND_URL }/admin">Admin Panel</a>
             </div>
           </div>
         </div>
@@ -662,9 +662,9 @@ module.exports.sendPasswordResetEmail = async (user, resetLink) => {
             <div class="footer">
               <p>This is an automated security notification from Zimlitech Intern Portal</p>
               <div class="footer-links">
-                <a href="${process.env.FRONTEND_URL || 'http://localhost:5173'}">Visit Portal</a>
+                <a href="${process.env.FRONTEND_URL }">Visit Portal</a>
                 <span>•</span>
-                <a href="${process.env.FRONTEND_URL || 'http://localhost:5173'}/contact">Contact Support</a>
+                <a href="${process.env.FRONTEND_URL }/contact">Contact Support</a>
               </div>
             </div>
           </div>
@@ -1061,9 +1061,9 @@ module.exports.sendSkillApprovalEmail = async (adminEmail, approvalLink, skill, 
                   ${approvalLink}
                 </p>
                 <div class="footer-links">
-                  <a href="${process.env.FRONTEND_URL || 'http://localhost:5173'}">Dashboard</a>
+                  <a href="${process.env.FRONTEND_URL }">Dashboard</a>
                   <span>•</span>
-                  <a href="${process.env.FRONTEND_URL || 'http://localhost:5173'}/admin">Admin Panel</a>
+                  <a href="${process.env.FRONTEND_URL }/admin">Admin Panel</a>
                 </div>
               </div>
             </div>
@@ -1092,7 +1092,7 @@ module.exports.sendProjectApprovalEmail = async (intern, project) => {
     });
 
     // Construct approval link to frontend
-    const approvalLink = `${process.env.FRONTEND_URL || 'http://localhost:5173'}/approve-project/${project.approvalToken}`;
+    const approvalLink = `${process.env.FRONTEND_URL }/approve-project/${project.approvalToken}`;
 
     const mailOptions = {
       from: process.env.SMTP_MAIL,
@@ -1468,9 +1468,9 @@ module.exports.sendProjectApprovalEmail = async (intern, project) => {
                 ${approvalLink}
               </p>
               <div class="footer-links">
-                <a href="${process.env.FRONTEND_URL || 'http://localhost:5173'}">Dashboard</a>
+                <a href="${process.env.FRONTEND_URL }">Dashboard</a>
                 <span>•</span>
-                <a href="${process.env.FRONTEND_URL || 'http://localhost:5173'}/admin">Admin Panel</a>
+                <a href="${process.env.FRONTEND_URL}/admin">Admin Panel</a>
               </div>
             </div>
           </div>
