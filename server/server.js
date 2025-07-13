@@ -33,7 +33,7 @@ app.use(cors({
   origin: process.env.NODE_ENV === 'production' 
   ? [process.env.FRONTEND_URL,'https://zip-f29f.vercel.app'] 
   : ['http://localhost:5173'],
-  credentials: true,
+  credentials: true,gi
   methods: ['GET', 'POST', 'PUT', 'DELETE','OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
   optionsSuccessStatus: 200 
