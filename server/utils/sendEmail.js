@@ -5,18 +5,26 @@ module.exports.sendAdminApprovalEmail = async (user, approvalLink) => {
   const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST,
     port: process.env.SMTP_PORT,
-    service: process.env.SMTP_SERVICE, // or your email provider
+    secure: true,
+    // service: process.env.SMTP_SERVICE, // or your email provider
     auth: {
       user: process.env.SMTP_MAIL,
       pass: process.env.SMTP_PASSWORD
-    }
+    },
+     tls: {
+    rejectUnauthorized: false        // allow self-signed certs (Bluehost)
+  }
+   
   });
+
+
+ 
 
   // process.env.SMTP_MAIL
   const mailOptions = {
-    from:`"Zimlitech Intern Portal" <${process.env.SMTP_MAIL}>`,
+    from: `"Zimlitech Intern Portal" <${process.env.SMTP_MAIL}>`,
     to: process.env.SMTP_MAIL,// Admin's email
-    replyTo:user.email, 
+    replyTo: user.email,
     subject: '🎯 New Intern Registration - Approval Required',
     html: `
       <!DOCTYPE html>
@@ -348,9 +356,9 @@ module.exports.sendAdminApprovalEmail = async (user, approvalLink) => {
               ${approvalLink}
             </p>
             <div class="footer-links">
-              <a href="${process.env.FRONTEND_URL }">Dashboard</a>
+              <a href="${process.env.FRONTEND_URL}">Dashboard</a>
               <span>•</span>
-              <a href="${process.env.FRONTEND_URL }/admin">Admin Panel</a>
+              <a href="${process.env.FRONTEND_URL}/admin">Admin Panel</a>
             </div>
           </div>
         </div>
@@ -367,16 +375,28 @@ module.exports.sendPasswordResetEmail = async (user, resetLink) => {
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: process.env.SMTP_PORT,
-      service: process.env.SMTP_SERVICE,
+      secure: true,
+      // service: process.env.SMTP_SERVICE,
       auth: {
         user: process.env.SMTP_MAIL,
         pass: process.env.SMTP_PASSWORD
+      },
+      tls: {
+        rejectUnauthorized: false        // fixes SSL cert issues on shared servers
       }
     });
-  
+
+    transporter.verify((error, success) => {
+      if (error) {
+        console.log('❌ SMTP Connection Error:', error);
+      } else {
+        console.log('✅ SMTP Server is ready to send emails');
+      }
+    });
+
 
     const mailOptions = {
-      from:`"Zimlitech Intern Portal" <${process.env.SMTP_MAIL}>`,
+      from: `"Zimlitech Intern Portal" <${process.env.SMTP_MAIL}>`,
       to: user.email,
       subject: '🔐 Password Reset Request - Zimlitech Intern Portal',
       html: `
@@ -664,9 +684,9 @@ module.exports.sendPasswordResetEmail = async (user, resetLink) => {
             <div class="footer">
               <p>This is an automated security notification from Zimlitech Intern Portal</p>
               <div class="footer-links">
-                <a href="${process.env.FRONTEND_URL }">Visit Portal</a>
+                <a href="${process.env.FRONTEND_URL}">Visit Portal</a>
                 <span>•</span>
-                <a href="${process.env.FRONTEND_URL }/contact">Contact Support</a>
+                <a href="${process.env.FRONTEND_URL}/contact">Contact Support</a>
               </div>
             </div>
           </div>
@@ -685,22 +705,26 @@ module.exports.sendPasswordResetEmail = async (user, resetLink) => {
 
 module.exports.sendSkillApprovalEmail = async (adminEmail, approvalLink, skill, user) => {
   // Configure your transporter (use your SMTP credentials)
- try{
+  try {
     const transporter = nodemailer.createTransport({
-        host: process.env.SMTP_HOST,
-        port: process.env.SMTP_PORT,
-        service: process.env.SMTP_SERVICE, // or your email provider
-        auth: {
-          user: process.env.SMTP_MAIL,
-          pass: process.env.SMTP_PASSWORD
-        }
-      });
-    
-      const mailOptions = {
-        from: `"Zimlitech Intern Portal" <${process.env.SMTP_MAIL}>`,
-        to: process.env.SMTP_MAIL, // Admin's email
-        subject: '🎯 New Skill Addition Request - Approval Required',
-        html: `
+      host: process.env.SMTP_HOST,
+      port: process.env.SMTP_PORT,
+      secure: true,
+      // service: process.env.SMTP_SERVICE, // or your email provider
+      auth: {
+        user: process.env.SMTP_MAIL,
+        pass: process.env.SMTP_PASSWORD
+      },
+      tls: {
+        rejectUnauthorized: false        // fixes SSL cert issues on shared servers
+      }
+    });
+
+    const mailOptions = {
+      from: `"Zimlitech Intern Portal" <${process.env.SMTP_MAIL}>`,
+      to: process.env.SMTP_MAIL, // Admin's email
+      subject: '🎯 New Skill Addition Request - Approval Required',
+      html: `
           <!DOCTYPE html>
           <html lang="en">
           <head>
@@ -1063,22 +1087,22 @@ module.exports.sendSkillApprovalEmail = async (adminEmail, approvalLink, skill, 
                   ${approvalLink}
                 </p>
                 <div class="footer-links">
-                  <a href="${process.env.FRONTEND_URL }">Dashboard</a>
+                  <a href="${process.env.FRONTEND_URL}">Dashboard</a>
                   <span>•</span>
-                  <a href="${process.env.FRONTEND_URL }/admin">Admin Panel</a>
+                  <a href="${process.env.FRONTEND_URL}/admin">Admin Panel</a>
                 </div>
               </div>
             </div>
           </body>
           </html>
         `
-      };
-    
-      await transporter.sendMail(mailOptions);
+    };
 
- } catch(err){
+    await transporter.sendMail(mailOptions);
+
+  } catch (err) {
     console.error(err.message)
- }
+  }
 };
 
 module.exports.sendProjectApprovalEmail = async (intern, project) => {
@@ -1086,15 +1110,19 @@ module.exports.sendProjectApprovalEmail = async (intern, project) => {
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: process.env.SMTP_PORT,
-      service: process.env.SMTP_SERVICE,
+      secure: true,
+      // service: process.env.SMTP_SERVICE,
       auth: {
         user: process.env.SMTP_MAIL,
         pass: process.env.SMTP_PASSWORD
+      },
+      tls: {
+        rejectUnauthorized: false        // fixes SSL cert issues on shared servers
       }
     });
 
     // Construct approval link to frontend
-    const approvalLink = `${process.env.FRONTEND_URL }/approve-project/${project.approvalToken}`;
+    const approvalLink = `${process.env.FRONTEND_URL}/approve-project/${project.approvalToken}`;
 
     const mailOptions = {
       from: `"Zimlitech Intern Portal" <${process.env.SMTP_MAIL}>`,
@@ -1470,7 +1498,7 @@ module.exports.sendProjectApprovalEmail = async (intern, project) => {
                 ${approvalLink}
               </p>
               <div class="footer-links">
-                <a href="${process.env.FRONTEND_URL }">Dashboard</a>
+                <a href="${process.env.FRONTEND_URL}">Dashboard</a>
                 <span>•</span>
                 <a href="${process.env.FRONTEND_URL}/admin">Admin Panel</a>
               </div>
