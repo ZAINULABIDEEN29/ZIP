@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Target, Calendar, CheckCircle, Clock, TrendingUp, Plus, Trash2 } from 'lucide-react';
+import { Target, Calendar, CheckCircle, Clock, TrendingUp, Plus, Trash2, Loader2 } from 'lucide-react';
 import TimelineCard from '../components/TimelineCard';
 import ProgressBar from '../components/ProgressBar';
 import Modal from '../components/Modal';
@@ -16,6 +16,12 @@ const Progress = () => {
     status: 'upcoming',
     date: new Date().toISOString().split('T')[0]
   });
+  const [adding, setAdding] = useState(false);
+  const [updatingId, setUpdatingId] = useState(null);
+  const [deletingId, setDeletingId] = useState(null);
+  const [editModal, setEditModal] = useState({ open: false, milestone: null });
+  const [editData, setEditData] = useState({ title: '', description: '', category: '', status: '', date: '' });
+  const [editing, setEditing] = useState(false);
 
   const categories = ['all', 'technical', 'project', 'soft skills', 'presentation'];
   const statusOptions = ['upcoming', 'in-progress', 'completed'];
@@ -36,7 +42,7 @@ const Progress = () => {
 
   const handleAddMilestone = async () => {
     if (!newMilestone.title.trim() || !newMilestone.description.trim()) return;
-    
+    setAdding(true);
     try {
       await addMilestone(newMilestone);
       setNewMilestone({
@@ -49,10 +55,13 @@ const Progress = () => {
       setShowAddModal(false);
     } catch (error) {
       console.error('Error adding milestone:', error);
+    } finally {
+      setAdding(false);
     }
   };
 
   const handleUpdateMilestone = async (milestoneId, updates) => {
+    setUpdatingId(milestoneId);
     try {
       // Automatically set progress based on status if not provided
       if (updates.status && !updates.progress) {
@@ -72,16 +81,44 @@ const Progress = () => {
       await updateMilestone(milestoneId, updates);
     } catch (error) {
       console.error('Error updating milestone:', error);
+    } finally {
+      setUpdatingId(null);
     }
   };
 
   const handleDeleteMilestone = async (milestoneId) => {
-      try {
-        await deleteMilestone(milestoneId);
-      } catch (error) {
-        console.error('Error deleting milestone:', error);
-      }
- 
+    setDeletingId(milestoneId);
+    try {
+      await deleteMilestone(milestoneId);
+    } catch (error) {
+      console.error('Error deleting milestone:', error);
+    } finally {
+      setDeletingId(null);
+    }
+  };
+
+  const openEditModal = (milestone) => {
+    setEditData({
+      title: milestone.title,
+      description: milestone.description,
+      category: milestone.category,
+      status: milestone.status,
+      date: milestone.date ? milestone.date.split('T')[0] : new Date().toISOString().split('T')[0],
+    });
+    setEditModal({ open: true, milestone });
+  };
+
+  const handleEditSave = async () => {
+    if (!editData.title.trim() || !editData.description.trim()) return;
+    setEditing(true);
+    try {
+      await handleUpdateMilestone(editModal.milestone._id, editData);
+      setEditModal({ open: false, milestone: null });
+    } catch (error) {
+      console.error('Error updating milestone:', error);
+    } finally {
+      setEditing(false);
+    }
   };
 
   if (loading) {
@@ -202,12 +239,24 @@ const Progress = () => {
             {progress && progress.length > 0 ? (
               <div className="space-y-6 lg:space-y-8 xl:space-y-10">
                 {filteredMilestones.map((milestone) => (
-                  <TimelineCard 
-                    key={milestone._id} 
-                    milestone={milestone}
-                    onUpdate={(updates) => handleUpdateMilestone(milestone._id, updates)}
-                    onDelete={() => handleDeleteMilestone(milestone._id)}
-                  />
+                  <div key={milestone._id} className="relative">
+                    {updatingId === milestone._id && (
+                      <div className="absolute inset-0 flex items-center justify-center bg-white/70 z-10 rounded-2xl">
+                        <Loader2 className="animate-spin text-primary" size={32} />
+                      </div>
+                    )}
+                    {deletingId === milestone._id && (
+                      <div className="absolute inset-0 flex items-center justify-center bg-white/70 z-10 rounded-2xl">
+                        <Loader2 className="animate-spin text-red-500" size={32} />
+                      </div>
+                    )}
+                    <TimelineCard 
+                      milestone={milestone}
+                      onUpdate={() => openEditModal(milestone)}
+                      onDelete={() => handleDeleteMilestone(milestone._id)}
+                      disableActions={updatingId === milestone._id || deletingId === milestone._id}
+                    />
+                  </div>
                 ))}
               </div>
             ) : (
@@ -321,13 +370,98 @@ const Progress = () => {
             <div className="flex gap-4 pt-4">
               <button
                 onClick={handleAddMilestone}
-                disabled={!newMilestone.title.trim() || !newMilestone.description.trim()}
-                className="flex-1 bg-primary text-white py-3 rounded-xl font-medium hover:scale-105 transition"
+                disabled={!newMilestone.title.trim() || !newMilestone.description.trim() || adding}
+                className="flex-1 bg-primary text-white py-3 rounded-xl font-medium hover:scale-105 transition flex items-center justify-center gap-2"
               >
-                Add Milestone
+                {adding ? <Loader2 className="animate-spin" size={20} /> : null}
+                {adding ? 'Adding...' : 'Add Milestone'}
               </button>
               <button
                 onClick={() => setShowAddModal(false)}
+                disabled={adding}
+                className="flex-1 bg-gray-200 text-gray-800 py-3 rounded-xl font-medium hover:scale-105 transition"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </Modal>
+
+        {/* Place the edit modal outside the main content but inside the main return */}
+        <Modal
+          open={editModal.open}
+          onClose={() => setEditModal({ open: false, milestone: null })}
+          title="Edit Milestone"
+        >
+          <div className="space-y-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Milestone Title</label>
+              <input
+                type="text"
+                value={editData.title}
+                onChange={(e) => setEditData({ ...editData, title: e.target.value })}
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 text-lg"
+                placeholder="e.g., Complete React Course"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
+              <textarea
+                value={editData.description}
+                onChange={(e) => setEditData({ ...editData, description: e.target.value })}
+                rows={3}
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 text-lg"
+                placeholder="Describe your milestone..."
+              />
+            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                <select
+                  value={editData.category}
+                  onChange={(e) => setEditData({ ...editData, category: e.target.value })}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 text-lg"
+                >
+                  <option value="Technical">Technical</option>
+                  <option value="Project">Project</option>
+                  <option value="Soft Skills">Soft Skills</option>
+                  <option value="Presentation">Presentation</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                <select
+                  value={editData.status}
+                  onChange={(e) => setEditData({ ...editData, status: e.target.value })}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 text-lg"
+                >
+                  <option value="upcoming">Upcoming</option>
+                  <option value="in-progress">In Progress</option>
+                  <option value="completed">Completed</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Target Date</label>
+              <input
+                type="date"
+                value={editData.date}
+                onChange={(e) => setEditData({ ...editData, date: e.target.value })}
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 text-lg"
+              />
+            </div>
+            <div className="flex gap-4 pt-4">
+              <button
+                onClick={handleEditSave}
+                disabled={!editData.title.trim() || !editData.description.trim() || editing}
+                className="flex-1 bg-primary text-white py-3 rounded-xl font-medium hover:scale-105 transition flex items-center justify-center gap-2"
+              >
+                {editing ? <Loader2 className="animate-spin" size={20} /> : null}
+                {editing ? 'Saving...' : 'Save Changes'}
+              </button>
+              <button
+                onClick={() => setEditModal({ open: false, milestone: null })}
+                disabled={editing}
                 className="flex-1 bg-gray-200 text-gray-800 py-3 rounded-xl font-medium hover:scale-105 transition"
               >
                 Cancel

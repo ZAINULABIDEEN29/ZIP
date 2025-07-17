@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Users, MessageCircle, Heart, Share2, Calendar, MapPin, Award, Target } from 'lucide-react';
+import { Plus, Users, MessageCircle, Heart, Share2, Calendar, MapPin, Award, Target, Loader2 } from 'lucide-react';
 import Modal from '../components/Modal';
 import AchievementBadge from '../components/AchievementBadge';
 import { useIntern } from '../context/InternContext';
@@ -22,13 +22,15 @@ const Social = () => {
     teamMembers: '',
     status: 'active'
   });
+  const [addingAchievement, setAddingAchievement] = useState(false);
+  const [addingProject, setAddingProject] = useState(false);
 
   const badgeOptions = ['Course Completion', 'Milestone', 'Excellence', 'Leadership', 'Innovation'];
   const statusOptions = ['active', 'completed', 'on-hold'];
 
   const handleAddAchievement = async () => {
     if (!newAchievement.title.trim() || !newAchievement.description.trim()) return;
-    
+    setAddingAchievement(true);
     try {
       await addAchievement(newAchievement);
       setNewAchievement({
@@ -39,12 +41,14 @@ const Social = () => {
       setShowAddAchievementModal(false);
     } catch (error) {
       toast.error('Error adding achievement:', error);
+    } finally {
+      setAddingAchievement(false);
     }
   };
 
   const handleAddTeamProject = async () => {
     if (!newProject.name.trim() || !newProject.description.trim()) return;
-    
+    setAddingProject(true);
     try {
       const projectData = {
         ...newProject,
@@ -52,7 +56,6 @@ const Social = () => {
         teamMembers: newProject.teamMembers.split(',').map(member => member.trim()).filter(member => member),
         startDate: new Date().toISOString().split('T')[0]
       };
-      
       await addTeamProject(projectData);
       setNewProject({
         name: '',
@@ -65,6 +68,8 @@ const Social = () => {
       setShowAddProjectModal(false);
     } catch (error) {
       toast.error('Error adding team project:', error);
+    } finally {
+      setAddingProject(false);
     }
   };
 
@@ -302,13 +307,15 @@ const Social = () => {
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4">
               <button
                 onClick={handleAddAchievement}
-                disabled={!newAchievement.title.trim() || !newAchievement.description.trim()}
-                className="flex-1 bg-primary text-white py-2 sm:py-3 rounded-xl font-medium hover:scale-105 transition text-sm sm:text-base"
+                disabled={!newAchievement.title.trim() || !newAchievement.description.trim() || addingAchievement}
+                className="flex-1 bg-primary text-white py-2 sm:py-3 rounded-xl font-medium hover:scale-105 transition text-sm sm:text-base flex items-center justify-center gap-2"
               >
-                Add Achievement
+                {addingAchievement ? <Loader2 className="animate-spin" size={18} /> : null}
+                {addingAchievement ? 'Adding...' : 'Add Achievement'}
               </button>
               <button
                 onClick={() => setShowAddAchievementModal(false)}
+                disabled={addingAchievement}
                 className="flex-1 bg-gray-200 text-gray-800 py-2 sm:py-3 rounded-xl font-medium hover:scale-105 transition text-sm sm:text-base"
               >
                 Cancel
@@ -395,13 +402,15 @@ const Social = () => {
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4">
               <button
                 onClick={handleAddTeamProject}
-                disabled={!newProject.name.trim() || !newProject.description.trim()}
-                className="flex-1 bg-green-600 text-white py-2 sm:py-3 rounded-xl font-medium hover:scale-105 transition text-sm sm:text-base"
+                disabled={!newProject.name.trim() || !newProject.description.trim() || addingProject}
+                className="flex-1 bg-green-600 text-white py-2 sm:py-3 rounded-xl font-medium hover:scale-105 transition text-sm sm:text-base flex items-center justify-center gap-2"
               >
-                Add Project
+                {addingProject ? <Loader2 className="animate-spin" size={18} /> : null}
+                {addingProject ? 'Adding...' : 'Add Project'}
               </button>
               <button
                 onClick={() => setShowAddProjectModal(false)}
+                disabled={addingProject}
                 className="flex-1 bg-gray-200 text-gray-800 py-2 sm:py-3 rounded-xl font-medium hover:scale-105 transition text-sm sm:text-base"
               >
                 Cancel

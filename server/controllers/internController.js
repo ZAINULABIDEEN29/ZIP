@@ -424,7 +424,8 @@ const getDashboardData = async (req, res) => {
         phone: intern.phone,
         location: intern.location,
         bio: intern.bio,
-        startDate: intern.startDate
+        startDate: intern.startDate,
+        education: intern.education || ''
       },
       stats: {
         overallProgress: intern.overallProgress,
@@ -977,7 +978,9 @@ const getCategoriesWithCounts = async (req, res) => {
       { id: 'fullstack', name: 'Full Stack' },
       { id: 'aiml', name: 'AI/ML' },
       { id: 'mobile', name: 'Mobile' },
-      { id: 'sqa', name: 'SQA' }
+      { id: 'sqa', name: 'SQA' },
+      { id: 'videoeditor', name: 'Video Editor' },
+      { id: 'marketing', name: 'Marketing' }
     ];
 
     const counts = await Promise.all(

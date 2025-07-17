@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { showToast } from '../components/Toast';
+import { logoutUtility } from '../utils/logout';
 
 
 const BACKEND_URL= import.meta.env.VITE_API_URL;
@@ -27,6 +29,14 @@ api.interceptors.response.use(
     return response.data;
   },
   (error) => {
+    if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+      // Token expired or unauthorized
+      showToast('Session expired. Please login again.', 'error');
+      logoutUtility();
+      setTimeout(() => {
+        window.location.href = '/login';
+      }, 100);
+    }
     throw error;
   }
 );

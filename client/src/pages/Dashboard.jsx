@@ -236,7 +236,7 @@ const Dashboard = () => {
     }
   }), []);
 
-  if (loading) {
+  if (loading || !profile) {
     return (
       <div className="min-h-screen bg-gray-100 p-4 sm:p-6 lg:p-8 xl:p-12">
         <div className="max-w-7xl mx-auto">

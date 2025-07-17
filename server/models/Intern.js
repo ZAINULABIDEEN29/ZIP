@@ -41,13 +41,25 @@ const internSchema = new mongoose.Schema({
       'DevOps Engineer',
       'UI/UX Designer',
       'Data Scientist',
-      'Admin'
+      // Corrected new roles
+      'Video Editor',
+      'Marketing'
     ],
     default: 'Intern'
   },
   category: {
     type: String,
-    enum: ['frontend', 'backend', 'fullstack', 'aiml', 'mobile', 'sqa'],
+    enum: [
+      'frontend',
+      'backend',
+      'fullstack',
+      'aiml',
+      'mobile',
+      'sqa',
+      // Corrected new categories
+      'videoeditor',
+      'marketing'
+    ],
     default: 'fullstack',
     
   },

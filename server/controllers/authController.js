@@ -169,17 +169,6 @@ module.exports.registerUSer = async (req, res) => {
         });
       } catch (emailError) {
         console.error('Email sending failed:', emailError);
-        // For development, still return the token
-        // if (process.env.NODE_ENV === 'development') {
-        //   res.json({ 
-        //     message: 'Password reset link generated (email failed)', 
-        //     resetToken,
-        //     resetLink,
-        //     success: true
-        //   });
-        // } else {
-        //   res.status(500).json({ error: 'Failed to send reset email. Please try again.' });
-        // }
       }
     } catch (error) {
       console.error('Forgot password error:', error);

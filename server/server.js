@@ -40,9 +40,6 @@ app.use(cors({
 }));
 
 
-
-
-
 // Body parsing middleware with increased limits for base64 images
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));

@@ -56,19 +56,23 @@ const LandingPage = () => {
 
     fetchData();
     
-   
-
- 
-
- 
-
- 
-
- 
-
- 
-
   }, []);
+
+  // After categories are fetched, ensure 'Video Editor' and 'Marketing' are present
+  useEffect(() => {
+    if (categories && categories.length > 0) {
+      let updated = [...categories];
+      if (!updated.some(cat => cat.name === 'Video Editor')) {
+        updated.push({ id: 'videoeditor', name: 'Video Editor', count: 0 });
+      }
+      if (!updated.some(cat => cat.name === 'Marketing')) {
+        updated.push({ id: 'marketing', name: 'Marketing', count: 0 });
+      }
+      if (updated.length !== categories.length) {
+        setCategories(updated);
+      }
+    }
+  }, [categories]);
 
   // Fetch interns when category changes
   useEffect(() => {
@@ -316,6 +320,7 @@ const InternCard = ({ intern }) => {
           <div className="flex-1">
             <h3 className="text-xl font-bold text-gray-900 mb-1">{intern.name}</h3>
             <p className="text-primary font-medium mb-2">{intern.role}</p>
+            <p className="text-gray-600 text-sm mb-2">{intern.education || 'Education: Not specified'}</p>
             <div className="flex items-center gap-4 text-sm text-gray-600">
               <div className="flex items-center gap-1">
                 <MapPin size={14} />
@@ -387,32 +392,32 @@ const InternCard = ({ intern }) => {
 // Intern Popup Component
 const InternPopup = ({ intern, onClose }) => {
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-2 sm:p-4 z-50">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl min-w-0 max-h-[90vh] overflow-y-auto flex flex-col">
         {/* Header */}
-        <div className="sticky top-0 bg-white border-b border-gray-200 p-6 rounded-t-2xl">
-          <div className="flex items-start justify-between">
-            <div className="flex items-start gap-4">
+        <div className="sticky top-0 bg-white border-b border-gray-200 p-4 sm:p-6 rounded-t-2xl">
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex items-start gap-4 min-w-0">
               <img 
                 src={intern.avatar} 
                 alt={intern.name}
-                className="w-20 h-20 rounded-full object-cover border-4 border-gray-100"
+                className="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover border-4 border-gray-100 flex-shrink-0"
               />
-              <div>
-                <h2 className="text-2xl font-bold text-gray-900 mb-1">{intern.name}</h2>
-                <p className="text-primary font-semibold text-lg mb-2">{intern.role}</p>
-                <div className="flex items-center gap-4 text-sm text-gray-600">
-                  <div className="flex items-center gap-1">
+              <div className="min-w-0">
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1 truncate break-words">{intern.name}</h2>
+                <p className="text-primary font-semibold text-base sm:text-lg mb-2 truncate break-words">{intern.role}</p>
+                <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-gray-600">
+                  <div className="flex items-center gap-1 truncate">
                     <MapPin size={16} />
-                    {intern.location}
+                    <span className="truncate">{intern.location}</span>
                   </div>
-                  <div className="flex items-center gap-1">
+                  <div className="flex items-center gap-1 truncate">
                     <Briefcase size={16} />
-                    {intern.experience}
+                    <span className="truncate">{intern.experience}</span>
                   </div>
-                  <div className="flex items-center gap-1">
+                  <div className="flex items-center gap-1 truncate">
                     <Star size={16} className="text-yellow-400" />
-                    {intern.progress}% Complete
+                    <span className="truncate">{intern.progress}% Complete</span>
                   </div>
                 </div>
               </div>
@@ -427,52 +432,46 @@ const InternPopup = ({ intern, onClose }) => {
         </div>
 
         {/* Content */}
-        <div className="p-6 space-y-6">
+        <div className="p-4 sm:p-6 space-y-6 w-full min-w-0">
           {/* Bio */}
           <div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">About</h3>
-            <p className="text-gray-600 leading-relaxed">{intern.bio}</p>
+            <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-3">About</h3>
+            <p className="text-gray-600 leading-relaxed break-words whitespace-pre-line">{intern.bio}</p>
           </div>
 
           {/* Contact & Links */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-3">Contact</h3>
+              <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-3">Contact</h3>
               <div className="space-y-2">
-                <div className="flex items-center gap-2 text-gray-600">
+                <div className="flex items-center gap-2 text-gray-600 break-all">
                   <Mail size={16} />
-                  <a href={`mailto:${intern.email}`} className="hover:text-primary">{intern.email}</a>
+                  <a href={`mailto:${intern.email}`} className="hover:text-primary break-all">{intern.email}</a>
                 </div>
-                <div className="flex items-center gap-2 text-gray-600">
+                <div className="flex items-center gap-2 text-gray-600 break-all">
                   <Phone size={16} />
-                  <a href={`tel:${intern.phone}`} className="hover:text-primary">{intern.phone}</a>
+                  <a href={`tel:${intern.phone}`} className="hover:text-primary break-all">{intern.phone}</a>
                 </div>
-                {/* <div className="flex items-center gap-2 text-gray-600">
-                  <Github size={16} />
-                  <a href={intern.github} target="_blank" rel="noopener noreferrer" className="hover:text-primary">
-                    GitHub Profile
-                  </a>
-                </div> */}
               </div>
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-3">Education</h3>
-              <p className="text-gray-600">{intern.education}</p>
+              <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-3">Education</h3>
+              <p className="text-gray-600 break-words whitespace-pre-line">{intern.education || 'Not specified'}</p>
             </div>
           </div>
 
           {/* Progress */}
           <div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Progress</h3>
+            <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-3">Progress</h3>
             <div className="space-y-3">
               <div>
-                <div className="flex justify-between text-sm mb-2">
+                <div className="flex justify-between text-xs sm:text-sm mb-2">
                   <span>Overall Progress</span>
                   <span className="font-medium">{intern.progress}%</span>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-3">
+                <div className="w-full bg-gray-200 rounded-full h-2 sm:h-3">
                   <div 
-                    className="bg-gradient-to-r from-primary to-red-500 h-3 rounded-full transition-all duration-500"
+                    className="bg-gradient-to-r from-primary to-red-500 h-2 sm:h-3 rounded-full transition-all duration-500"
                     style={{ width: `${intern.progress}%` }}
                   ></div>
                 </div>
@@ -482,78 +481,77 @@ const InternPopup = ({ intern, onClose }) => {
 
           {/* Skills */}
           <div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Skills</h3>
-        <div className="flex flex-wrap gap-2">
-          {intern.skills.map((skill, index) => (
-            <span 
-              key={index}
-              className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium"
-            >
-              {skill}
-            </span>
-          ))}
-        </div>
-      </div>
+            <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-3">Skills</h3>
+            <div className="flex flex-wrap gap-2">
+              {intern.skills.map((skill, index) => (
+                <span 
+                  key={index}
+                  className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs sm:text-sm font-medium break-words"
+                >
+                  {skill}
+                </span>
+              ))}
+            </div>
+          </div>
 
           {/* Achievements */}
           <div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Achievements</h3>
+            <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-3">Achievements</h3>
             <div className="space-y-2">
               {intern.achievements.map((achievement, index) => (
                 <div key={index} className="flex items-center gap-2">
                   <Award size={16} className="text-yellow-500" />
-                  <span className="text-gray-600">{achievement}</span>
+                  <span className="text-gray-600 break-words">{achievement}</span>
                 </div>
               ))}
             </div>
-        </div>
-        
+          </div>
           {/* Portfolio */}
           <div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Portfolio</h3>
+            <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-4">Portfolio</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {intern.portfolio.map(project => (
-                <div key={project.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-                <img 
-                  src={project.image} 
-                  alt={project.title}
-                  className="w-full h-32 object-cover rounded-lg mb-3"
-                />
-                <h5 className="font-semibold text-gray-900 mb-1">{project.title}</h5>
-                <p className="text-sm text-gray-600 mb-3">{project.description}</p>
-                <div className="flex flex-wrap gap-1 mb-3">
-                  {project.technologies.map((tech, index) => (
-                    <span 
-                      key={index}
-                      className="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs"
+              {intern.portfolio.map(project => (
+                <div key={project.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow min-w-0">
+                  <img 
+                    src={project.image} 
+                    alt={project.title}
+                    className="w-full h-32 object-cover rounded-lg mb-3"
+                  />
+                  <h5 className="font-semibold text-gray-900 mb-1 break-words truncate text-sm sm:text-base">{project.title}</h5>
+                  <p className="text-xs sm:text-sm text-gray-600 mb-3 break-words whitespace-pre-line">{project.description}</p>
+                  <div className="flex flex-wrap gap-1 mb-3">
+                    {project.technologies.map((tech, index) => (
+                      <span 
+                        key={index}
+                        className="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs break-words"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="flex gap-2">
+                    <a
+                      href={project.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 bg-primary text-white text-center py-2 rounded-lg text-xs sm:text-sm font-medium hover:bg-red-700 transition-colors flex items-center justify-center gap-1"
                     >
-                      {tech}
-                    </span>
-                  ))}
+                      <ExternalLink size={14} />
+                      Live Demo
+                    </a>
+                    <a
+                      href={project.githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 bg-gray-800 text-white text-center py-2 rounded-lg text-xs sm:text-sm font-medium hover:bg-gray-900 transition-colors flex items-center justify-center gap-1"
+                    >
+                      <Github size={14} />
+                      Code
+                    </a>
+                  </div>
                 </div>
-                <div className="flex gap-2">
-                  <a
-                    href={project.liveUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                      className="flex-1 bg-primary text-white text-center py-2 rounded-lg text-sm font-medium hover:bg-red-700 transition-colors flex items-center justify-center gap-1"
-                  >
-                    <ExternalLink size={14} />
-                    Live Demo
-                  </a>
-                  <a
-                    href={project.githubUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-1 bg-gray-800 text-white text-center py-2 rounded-lg text-sm font-medium hover:bg-gray-900 transition-colors flex items-center justify-center gap-1"
-                  >
-                    <Github size={14} />
-                    Code
-                  </a>
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>

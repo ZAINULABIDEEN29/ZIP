@@ -328,7 +328,7 @@ const Portfolio = () => {
                 <button
                   type="button"
                   onClick={() => {
-                    console.log('Setting project type to: user');
+                    
                     setProjectType('user');
                   }}
                   className={`flex-1 py-2 px-3 rounded-lg border text-sm font-medium transition ${
@@ -343,7 +343,7 @@ const Portfolio = () => {
                 <button
                   type="button"
                   onClick={() => {
-                    console.log('Setting project type to: zimlitech');
+                   
                     setProjectType('zimlitech');
                   }}
                   className={`flex-1 py-2 px-3 rounded-lg border text-sm font-medium transition ${

@@ -214,7 +214,6 @@ const internReducer = (state, action) => {
     case 'DELETE_PROJECT':
       
       const filteredPortfolio = state.portfolio.filter(project => project._id !== action.payload);
-      console.log('Portfolio after filtering:', filteredPortfolio.length, 'projects');
       
       return {
         ...state,

@@ -17,6 +17,7 @@ const Profile = () => {
     bio: '',
     education: ''
   });
+  const [saving, setSaving] = useState(false);
 
   // Role options
   const roleOptions = [
@@ -29,7 +30,10 @@ const Profile = () => {
     'SQA Engineer',
     'DevOps Engineer',
     'UI/UX Designer',
-    'Data Scientist'
+    'Data Scientist',
+    // Only new roles, no 'Intern' in the name
+    'Video Editor',
+    'Marketing'
   ];
 
   // Category options (matching the backend enum)
@@ -39,7 +43,10 @@ const Profile = () => {
     { value: 'fullstack', label: 'Full Stack Development' },
     { value: 'aiml', label: 'AI/ML Development' },
     { value: 'mobile', label: 'Mobile Development' },
-    { value: 'sqa', label: 'SQA Testing' }
+    { value: 'sqa', label: 'SQA Testing' },
+    // Only new categories, no 'Intern' in the name
+    { value: 'videoeditor', label: 'Video Editor' },
+    { value: 'marketing', label: 'Marketing' }
   ];
 
   // Initialize edit data when profile loads
@@ -59,11 +66,14 @@ const Profile = () => {
   }, [profile]);
 
   const handleSave = async () => {
+    setSaving(true);
     try {
       await updateProfile(editData);
       setIsEditing(false);
     } catch (error) {
       console.error('Error updating profile:', error);
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -122,12 +132,23 @@ const Profile = () => {
                   <button
                     onClick={handleSave}
                     className="bg-primary text-white px-6 py-3 rounded-xl flex items-center gap-3 hover:scale-105 transition text-lg font-medium"
+                    disabled={saving}
                   >
-                    <Save size={20} /> Save
+                    {saving ? (
+                      <span className="flex items-center gap-2">
+                        <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg>
+                        Saving...
+                      </span>
+                    ) : (
+                      <>
+                        <Save size={20} /> Save
+                      </>
+                    )}
                   </button>
                   <button
                     onClick={handleCancel}
                     className="bg-gray-200 text-gray-800 px-6 py-3 rounded-xl flex items-center gap-3 hover:scale-105 transition text-lg font-medium"
+                    disabled={saving}
                   >
                     <X size={20} /> Cancel
                   </button>
@@ -264,7 +285,7 @@ const Profile = () => {
                       placeholder="e.g. BSc Computer Science, MIT"
                     />
                   ) : (
-                    <span className="text-gray-700 text-sm lg:text-base truncate">{profile?.education || 'Add your education'}</span>
+                    <span className="text-gray-700 text-sm lg:text-base truncate">{profile?.education !== undefined ? (profile.education || 'Add your education') : 'Add your education'}</span>
                   )}
                 </div>
               </div>
