@@ -134,7 +134,6 @@ const addProject = async (req, res) => {
     let approvalToken;
     if (type === 'zimlitech') {
       approvalToken = crypto.randomBytes(24).toString('hex');
-      console.log('Generated approval token for Zimlitech project:', approvalToken);
     }
     const projectData = {
       ...rest,

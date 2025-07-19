@@ -539,15 +539,6 @@ const InternPopup = ({ intern, onClose }) => {
                       <ExternalLink size={14} />
                       Live Demo
                     </a>
-                    <a
-                      href={project.githubUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex-1 bg-gray-800 text-white text-center py-2 rounded-lg text-xs sm:text-sm font-medium hover:bg-gray-900 transition-colors flex items-center justify-center gap-1"
-                    >
-                      <Github size={14} />
-                      Code
-                    </a>
                   </div>
                 </div>
               ))}

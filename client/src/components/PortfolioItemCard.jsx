@@ -14,7 +14,7 @@ const techColors = [
 ];
 
 // Accept githubProfileUrl as a prop, fallback to a default profile if not provided
-const DEFAULT_GITHUB_PROFILE = 'https://github.com/';
+// const DEFAULT_GITHUB_PROFILE = 'https://github.com/';
 
 const PortfolioItemCard = ({ project, onDelete, githubProfileUrl }) => {
   return (
@@ -68,7 +68,7 @@ const PortfolioItemCard = ({ project, onDelete, githubProfileUrl }) => {
     
         {/* Responsive, modern action buttons */}
         <div className="flex  flex-row gap-2 mt-6">
-          <a
+          {/* <a
             href={githubProfileUrl || DEFAULT_GITHUB_PROFILE}
             target="_blank"
             rel="noopener noreferrer"
@@ -76,12 +76,12 @@ const PortfolioItemCard = ({ project, onDelete, githubProfileUrl }) => {
           >
             <User size={18} />
             GitHub Profile
-          </a>
+          </a> */}
           <a
             href={project.liveUrl || '#'}
             target="_blank"
             rel="noopener noreferrer"
-            className={`flex-1 bg-gradient-to-r from-primary to-blue-500 text-white px-4 py-2 rounded-full flex items-center justify-center gap-2 shadow-md transition-all duration-150 text-base font-semibold ${project.liveUrl ? 'hover:from-blue-600 hover:to-primary hover:scale-105' : 'opacity-50 pointer-events-none'}`}
+            className={`flex-1 bg-red-700 text-white px-4 py-2 rounded-full flex items-center justify-center gap-2 shadow-md transition-all duration-150 text-base font-semibold ${project.liveUrl ? 'hover:bg-red-500 hover:scale-105' : 'opacity-50 pointer-events-none'}`}
             tabIndex={project.liveUrl ? 0 : -1}
             aria-disabled={!project.liveUrl}
           >

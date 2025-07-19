@@ -38,21 +38,6 @@ const Portfolio = () => {
 
  
   
-  // Log each project's type field
-  // if (portfolio && portfolio.length > 0) {
-  //   portfolio.forEach((project, index) => {
-  //     console.log(`Project ${index}:`, {
-  //       title: project.title,
-  //       type: project.type,
-  //       approvalStatus: project.approvalStatus,
-  //       hasType: 'type' in project,
-  //       allKeys: Object.keys(project)
-  //     });
-  //   });
-  // }
-  
-
-
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -240,7 +225,7 @@ const Portfolio = () => {
                   key={project._id} 
                   project={project} 
                   onDelete={() => handleDeleteProject(project._id)}
-                  githubProfileUrl={profile?.githubUrl}
+                  // githubProfileUrl={profile?.githubUrl}
                 />
               ))}
             </div>
@@ -271,7 +256,7 @@ const Portfolio = () => {
                   <PortfolioItemCard 
                     project={project} 
                     onDelete={() => handleDeleteProject(project._id)}
-                    githubProfileUrl={profile?.githubUrl}
+                    // githubProfileUrl={profile?.githubUrl}
                   />
                   <div className="absolute top-2 right-2 bg-yellow-500 text-white px-2 py-1 rounded-full text-xs font-medium">
                     Pending
@@ -296,7 +281,7 @@ const Portfolio = () => {
                 key={project._id} 
                 project={project} 
                 onDelete={() => handleDeleteProject(project._id)}
-                githubProfileUrl={profile?.githubUrl}
+                // githubProfileUrl={profile?.githubUrl}
               />
             ))}
           </div>
@@ -429,8 +414,8 @@ const Portfolio = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 md:gap-4">
-              <div>
+            <div className="grid-cols-6 sm:grid-cols-2 gap-2 sm:gap-3 md:gap-4">
+              {/* <div>
                 <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">GitHub URL</label>
                 <input
                   type="url"
@@ -439,7 +424,7 @@ const Portfolio = () => {
                   className="w-full px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 md:py-3 border border-gray-300 rounded-lg sm:rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 text-sm sm:text-base"
                   placeholder="https://github.com/..."
                 />
-              </div>
+              </div> */}
 
               <div>
                 <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">Live URL</label>

@@ -87,12 +87,12 @@ const Feedback = () => {
         <div className="bg-white rounded-2xl shadow-md p-6 lg:p-8 xl:p-10 mb-6 lg:mb-8 xl:mb-10">
           <div className="flex flex-col lg:flex-row justify-between items-start gap-4 lg:gap-6 mb-6 lg:mb-8">
             <h1 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-gray-800">Mentorship Feedback</h1>
-            <button
+           {newFeedback.role === "mentor" ?  <button
               onClick={() => setShowAddModal(true)}
               className="bg-primary text-white px-6 py-3 rounded-xl flex items-center gap-3 hover:scale-105 transition text-lg font-medium"
             >
               <Plus size={24} /> Add Feedback
-            </button>
+            </button> : ""}
           </div>
         </div>
 
